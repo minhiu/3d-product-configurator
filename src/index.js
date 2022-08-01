@@ -3,6 +3,7 @@ import * as THREE from "three";
 import WebGL from "./modules/WebGL";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import ColorPicker from "simple-color-picker";
 
 // Check WebGL Availability
 if (!WebGL.isWebGLAvailable()) {
@@ -45,6 +46,19 @@ const lightP = new THREE.PointLight(0xeeeeee, 2);
 lightP.position.set(1000, 1000, 1000);
 scene.add(lightP);
 
+// Color Picker
+const colorPicker = new ColorPicker();
+colorPicker.appendTo(document.querySelector('.color-picker'));
+colorPicker.onChange(e => $("#colorHex").val(e));
+
+
+$("#colorForm").submit((e) => {
+  e.preventDefault();
+  const newLight = new THREE.PointLight($("#colorHex").val());
+  newLight.position.set(1000, 1000, 1000);
+  scene.add(newLight);
+})
+
 // Animate the object
 const animate = () => {
   requestAnimationFrame(animate);
@@ -69,5 +83,4 @@ loader.load(
     console.log(error(err));
   }
 );
-
 animate();
