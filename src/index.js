@@ -5,82 +5,143 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import ColorPicker from "simple-color-picker";
 
-// Check WebGL Availability
-if (!WebGL.isWebGLAvailable()) {
-  const warning = WebGL.getWebGLErrorMessage();
-  document.getElementById("container").appendChild(warning);
-  throw new Error(warning);
-}
+let scene, camera, renderer, controls, gridHelper, light, colorPicker;
+let model, modelColor;
+let isMinimized = false;
 
-// Init Scene
-const scene = new THREE.Scene();
+/** Initialize all instances */
+const init = () => {
+  // Check WebGL Availability
+  if (!WebGL.isWebGLAvailable()) {
+    const warning = WebGL.getWebGLErrorMessage();
+    document.getElementById("container").appendChild(warning);
+    throw new Error(warning);
+  }
 
-// Init Camera
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera.position.set(0, 200, 200);
+  // Init Scene
+  scene = new THREE.Scene();
 
-// Init Renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-renderer.setClearColor(0x65c4a8, 1);
+  // Init Camera
+  camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 200, 200);
 
-// Orbit Control
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.autoRotate = true;
+  // Init Renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.getElementById("container").appendChild(renderer.domElement);
+  renderer.setClearColor(0x65c4a8, 1);
 
-// Grid
-const gridHelper = new THREE.GridHelper(250, 10, 0xf1f1f1, 0xf1f1f1);
-scene.add(gridHelper);
+  // Orbit Control
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.autoRotate = true;
 
-// Lighting
-const lightA = new THREE.AmbientLight(0xf0f0f0);
-scene.add(lightA);
+  // Grid
+  gridHelper = new THREE.GridHelper(250, 10, 0xf1f1f1, 0xf1f1f1);
+  scene.add(gridHelper);
 
-const lightP = new THREE.PointLight(0xeeeeee, 2);
-lightP.position.set(1000, 1000, 1000);
-scene.add(lightP);
+  // Lighting
+  const light = new THREE.HemisphereLight( 0xffffff, 0x65c4a8, 1 );
+  scene.add( light );
 
-// Color Picker
-const colorPicker = new ColorPicker();
-colorPicker.appendTo(document.querySelector('.color-picker'));
-colorPicker.onChange(e => $("#colorHex").val(e));
+  // Color Picker
+  colorPicker = new ColorPicker({color: "#9CB4CC"});
+  colorPicker.appendTo(document.querySelector(".color-picker"));
 
+  // 3D Model
+  loadGLTFModel("./assets/3d-models/untitled.gltf");
 
-$("#colorForm").submit((e) => {
-  e.preventDefault();
-  const newLight = new THREE.PointLight($("#colorHex").val());
-  newLight.position.set(1000, 1000, 1000);
-  scene.add(newLight);
-})
+  // Event Listner
+  window.addEventListener( 'resize', onWindowResize );
+  $('#colorForm').submit(onClickSubmitColor);
+  colorPicker.onChange((e) => {
+    modelColor = e;
+    $("#colorInput").val(modelColor);
+  });
+  $('#minimizeBtn').click(() => {
+    if (isMinimized) {
+      $('#leftBar').css("left", "0");
+      $('#minimizeBtn').css("left", "300px");
+      
+    } else {
+      $('#leftBar').css("left", "-300px");
+      $('#minimizeBtn').css("left", "0");
+    }
+    isMinimized = !isMinimized;
+  });
+};
 
-// Animate the object
+/** Animate the object */
 const animate = () => {
   requestAnimationFrame(animate);
   controls.update();
+  render();
+};
+
+/** Render the object */
+const render = () => {
   renderer.render(scene, camera);
 };
 
-// GLTF Loader
-const loader = new GLTFLoader();
-loader.load(
-  "./assets/3d-models/tpc-cr-tin-v2a-bottom.gltf",
-  (gltf) => {
-    const model = gltf.scene;
-    model.autoRotate = true;
-    model.scale.set(1, 1, 1);
-    model.position.set(-50, 0, 0);
-    model.rotateX(Math.PI / 2);
-    scene.add(model);
-  },
-  undefined,
-  (err) => {
-    console.log(error(err));
+/** Load 3D GLTF Model */
+const loadGLTFModel = (path) => {
+  const loader = new GLTFLoader();
+  loader.load(
+    path,
+    (gltf) => {
+      const material = new THREE.MeshPhongMaterial({ color: 0x9CB4CC });
+      const gltfScene = gltf.scene;
+      model = gltfScene.children[0];
+      model.material = material;
+      gltfScene.autoRotate = true;
+      gltfScene.scale.set(1, 1, 1);
+      gltfScene.position.set(-50, 0, 0);
+      gltfScene.rotateX(Math.PI / 2);
+      scene.add(gltfScene);
+    },
+    undefined,
+    (err) => {
+      console.log(error(err));
+    }
+  );
+};
+
+/** Color Submit Form */
+const onClickSubmitColor = (e) => {
+  e.preventDefault();
+  modelColor = validateHexString($('#colorInput').val());
+  console.log(modelColor);
+
+  if (colorPicker.getHexString() !== modelColor) {
+    colorPicker.setColor(modelColor);
   }
-);
+  $('#colorInput').val(modelColor);
+  model.material = new THREE.MeshPhongMaterial({ color: new THREE.Color(modelColor) });
+};
+
+/** On Resize */
+const onWindowResize = () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+/** Validate color hexstring */
+const validateHexString = (hex) => {
+  let newHex = hex;
+
+  if (hex[0] !== "#" && hex.length === 6) {
+    newHex = "#" + hex;
+  } else if (hex.length !== 7) {
+    newHex = "#9CB4CC";
+    alert("Wrong Hex String. Please use this format: '#FFFFFF' ");
+  }
+  return newHex;
+}
+
+init();
 animate();
