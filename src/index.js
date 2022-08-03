@@ -53,11 +53,11 @@ const init = () => {
   colorPicker.appendTo(document.querySelector(".color-picker"));
 
   // 3D Model
-  loadGLTFModel("./assets/3d-models/untitled.gltf");
+  loadGLTFModel("./assets/3d-models/tin.gltf");
 
   // Event Listner
   window.addEventListener( 'resize', onWindowResize );
-  
+
   $('#colorForm').submit(onClickSubmitColor);
 
   colorPicker.onChange((e) => {
