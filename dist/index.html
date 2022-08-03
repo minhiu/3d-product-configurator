@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>TPC 3D Product Room</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      .Scp {
-        margin-inline: auto;
-      }
-    </style>
-  </head>
-  <body style="margin: 0; font-family: 'Urbanist', sans-serif">
-    <div id="container">
-      <div
-        id="leftBar"
-        style="
+
+<head>
+  <meta charset="utf-8" />
+  <title>TPC 3D Product Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap" rel="stylesheet" />
+  <style>
+    .Scp {
+      margin-inline: auto;
+    }
+
+    #colorBtn:hover {
+      background-color: #fff !important;
+      border: 1px solid #65c4a8 !important;
+    }
+  </style>
+</head>
+
+<body style="margin: 0; font-family: 'Urbanist', sans-serif">
+  <div id="container">
+    <div id="leftBar" style="
           background-color: #fff;
           position: absolute;
           width: 300px;
@@ -29,34 +31,47 @@
           padding-bottom: 50px;
           transition: 0.3s ease-in-out;
           left: 0;
-        "
-      >
-        <img src="./assets/images/tpc-logo.png" style="width: 100px" />
-        <h1 style="font-size: 30px; font-weight: 600">
-          3D Showroom Experience
-        </h1>
-        <h3>Choose a color:</h3>
+        ">
+      <img src="./assets/images/tpc-logo.png" style="width: 100px" />
+      <h1 style="font-size: 30px; font-weight: 600">
+        3D Showroom Experience (Beta)
+      </h1>
+      <h3>Choose a color:</h>
         <form id="colorForm" style="padding-bottom: 20px">
-          <input id="colorInput" />
-          <button type="submit">Submit</button>
+          <input style="
+            width: 60px;
+            height: 20px;
+            box-shadow: none;
+            border: 1px solid #65c4a8;
+          " id="colorInput" />
+          <button id="colorBtn" 
+            style="
+              width: 60px;
+              height: 25px;
+              box-shadow: none;
+              border: none;
+              background-color: #65c4a8;
+              cursor: pointer;
+              transition: 0.3s ease-in-out;
+            " type="submit">Submit</button>
         </form>
         <div class="color-picker" style="margin: auto"></div>
-      </div>
-      <div
-        id="minimizeBtn"
-        style="
-          width: 50px;
-          height: 100px;
+        <p style="color: #000; left: 0; right: 0; position: absolute; bottom: 0">
+          More features coming soon!
+        </p>
+    </div>
+    <img id="minimizeBtn" style="
+          width: 30px;
+          height: 30px;
           position: absolute;
           left: 300px;
-          top: calc(50vh - 50px);
-          background-color: black;
+          top: calc(50vh - 30px);
           transition: 0.3s ease-in-out;
           cursor: pointer;
-        "
-      ></div>
-    </div>
+        " src="./assets/images/icon-back.png">
+    </img>
     <script src="/assets/js/jquery-3.6.0.min.js"></script>
     <script src="main.js"></script>
-  </body>
+</body>
+
 </html>

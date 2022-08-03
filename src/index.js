@@ -57,19 +57,24 @@ const init = () => {
 
   // Event Listner
   window.addEventListener( 'resize', onWindowResize );
+  
   $('#colorForm').submit(onClickSubmitColor);
+
   colorPicker.onChange((e) => {
     modelColor = e;
     $("#colorInput").val(modelColor);
   });
+
   $('#minimizeBtn').click(() => {
     if (isMinimized) {
       $('#leftBar').css("left", "0");
       $('#minimizeBtn').css("left", "300px");
+      $('#minimizeBtn').css("transform", "rotate(0deg)");
       
     } else {
       $('#leftBar').css("left", "-300px");
       $('#minimizeBtn').css("left", "0");
+      $('#minimizeBtn').css("transform", "rotate(180deg)");
     }
     isMinimized = !isMinimized;
   });
@@ -99,7 +104,7 @@ const loadGLTFModel = (path) => {
       model.material = material;
       gltfScene.autoRotate = true;
       gltfScene.scale.set(1, 1, 1);
-      gltfScene.position.set(-50, 0, 0);
+      gltfScene.position.set(-55, -37, -80);
       gltfScene.rotateX(Math.PI / 2);
       scene.add(gltfScene);
     },
@@ -114,7 +119,6 @@ const loadGLTFModel = (path) => {
 const onClickSubmitColor = (e) => {
   e.preventDefault();
   modelColor = validateHexString($('#colorInput').val());
-  console.log(modelColor);
 
   if (colorPicker.getHexString() !== modelColor) {
     colorPicker.setColor(modelColor);
