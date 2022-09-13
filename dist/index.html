@@ -36,40 +36,36 @@
       <h1 style="font-size: 30px; font-weight: 600">
         3D Showroom Experience (Beta)
       </h1>
-      <div id="color">
-        <h3>Choose a color:</h>
-          <form id="colorForm" style="padding-bottom: 20px">
-            <input style="
-            width: 60px;
-            height: 20px;
-            box-shadow: none;
-            border: 1px solid #65c4a8;
-          " id="colorInput" />
-            <button id="colorBtn" style="
-              width: 60px;
-              height: 25px;
-              box-shadow: none;
-              border: none;
-              background-color: #65c4a8;
-              cursor: pointer;
-              transition: 0.3s ease-in-out;
-            " type="submit">Submit</button>
-          </form>
-          <div class="color-picker" style="margin: auto"></div>
+      <div id="model" style="margin-bottom: 40px;">
+        <h3 style="margin-bottom: 0;">Choose a model:</h3>
+        <select name="models" id="models" style="
+          width: 60px;
+          height: 25px;
+          box-shadow: none;
+          border: 1px solid #65c4a8;
+          margin: auto;
+          ">
+          <option value="tin" selected="selected">Tin</option>
+          <option value="jar">Jar</option>
+        </select>
+        <button id="modelBtn" style="
+          width: 60px;
+          height: 25px;
+          box-shadow: none;
+          border: none;
+          background-color: #65c4a8;
+          cursor: pointer;
+          transition: 0.3s ease-in-out;
+        " type="submit">Submit</button>
       </div>
-      <div id="model">
-        <h3">Choose a model:</h>
-        <form id="modelForm" style="padding-bottom: 20px">
-          <select name="models" id="models" style="
-            width: 60px;
-            height: 20px;
-            box-shadow: none;
-            border: 1px solid #65c4a8;
-            margin: auto;
-            ">
-            <option value="tin" selected="selected">Tin</option>
-            <option value="jar">Jar</option>
-          </select>
+      <div id="color">
+        <h3 style="margin-bottom: 0;">Choose a color:</h3>
+        <input style="
+          width: 60px;
+          height: 20px;
+          box-shadow: none;
+          border: 1px solid #65c4a8;
+        " id="colorInput" />
           <button id="colorBtn" style="
             width: 60px;
             height: 25px;
@@ -79,7 +75,7 @@
             cursor: pointer;
             transition: 0.3s ease-in-out;
           " type="submit">Submit</button>
-        </form>
+          <div class="color-picker" style="margin: auto; margin-top: 5px;"></div>
       </div>
       <p style="color: #000; left: 0; right: 0; position: absolute; bottom: 0">
         More features coming soon!
@@ -95,7 +91,7 @@
           cursor: pointer;
         " src="./assets/images/icon-back.png">
     </img>
-    <script src="/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="./assets/js/jquery-3.6.0.min.js"></script>
     <script src="main.js"></script>
 </body>
 

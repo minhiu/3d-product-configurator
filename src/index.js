@@ -57,9 +57,8 @@ const init = () => {
 
   // Event Listner
   window.addEventListener( 'resize', onWindowResize );
-
-  $('#colorForm').submit(onClickSubmitColor);
-  $('#modelForm').submit(onClickSubmitModel);
+  $('#colorBtn').click(onClickSubmitColor);
+  $('#modelBtn').click(onClickSubmitModel);
 
   colorPicker.onChange((e) => {
     modelColor = e;
@@ -123,7 +122,6 @@ const loadGLTFModel = (path) => {
 
 /** Color Submit Form */
 const onClickSubmitColor = e => {
-  e.preventDefault();
   modelColor = validateHexString($('#colorInput').val());
 
   if (colorPicker.getHexString() !== modelColor) {
@@ -135,7 +133,6 @@ const onClickSubmitColor = e => {
 
 /** Models Submit Form */
 const onClickSubmitModel = e => {
-  e.preventDefault();
   const newModel = $('#models')[0].value;
 
   if (chosenModel === newModel) return;
