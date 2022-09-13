@@ -141,7 +141,6 @@ const onClickSubmitModel = e => {
   switch (newModel) {
     case "tin":
       loadGLTFModel("./assets/3d-models/tin.gltf");
-      console.log('loaded Tin');
       break;
     case "jar":
       loadGLTFModel("./assets/3d-models/jar.gltf");
