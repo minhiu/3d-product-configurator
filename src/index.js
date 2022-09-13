@@ -53,7 +53,7 @@ const init = () => {
   colorPicker.appendTo(document.querySelector(".color-picker"));
 
   // 3D Model
-  loadGLTFModel("./assets/3d-models/tin.gltf");
+  loadGLTFModel(`${process.env.URL}/assets/3d-models/tin.gltf`);
 
   // Event Listner
   window.addEventListener( 'resize', onWindowResize );
@@ -140,10 +140,10 @@ const onClickSubmitModel = e => {
   scene.remove(gltfScene);
   switch (newModel) {
     case "tin":
-      loadGLTFModel("./assets/3d-models/tin.gltf");
+      loadGLTFModel(`${process.env.URL}/assets/3d-models/tin.gltf`);
       break;
     case "jar":
-      loadGLTFModel("./assets/3d-models/jar.gltf");
+      loadGLTFModel(`${process.env.URL}/assets/3d-models/jar.gltf`);
       break;
   }
 

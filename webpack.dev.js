@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const { merge } = require('webpack-merge');
  const common = require('./webpack.common.js');
 
@@ -7,4 +8,9 @@ const { merge } = require('webpack-merge');
    devServer: {
      static: './dist',
    },
+   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.URL': JSON.stringify('.'),
+    }),
+   ]
  });
