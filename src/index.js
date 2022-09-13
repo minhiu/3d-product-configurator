@@ -6,7 +6,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import ColorPicker from "simple-color-picker";
 
 let scene, camera, renderer, controls, gridHelper, light, colorPicker;
-let model, modelColor;
+let gltfScene, model, modelColor, chosenModel = 'tin';
 let isMinimized = false;
 
 /** Initialize all instances */
@@ -59,6 +59,7 @@ const init = () => {
   window.addEventListener( 'resize', onWindowResize );
 
   $('#colorForm').submit(onClickSubmitColor);
+  $('#modelForm').submit(onClickSubmitModel);
 
   colorPicker.onChange((e) => {
     modelColor = e;
@@ -99,14 +100,19 @@ const loadGLTFModel = (path) => {
     path,
     (gltf) => {
       const material = new THREE.MeshPhongMaterial({ color: 0x9CB4CC });
-      const gltfScene = gltf.scene;
+      gltfScene = gltf.scene;
       model = gltfScene.children[0];
       model.material = material;
       gltfScene.autoRotate = true;
       gltfScene.scale.set(1, 1, 1);
-      gltfScene.position.set(-55, -37, -80);
       gltfScene.rotateX(Math.PI / 2);
-      scene.add(gltfScene);
+      
+      if (path.includes("tin"))
+          gltfScene.position.set(-55, -37, -80);
+      else if (path.includes("jar"))
+          gltfScene.position.set(-50, 0, -50);
+
+      scene.add(gltfScene);    
     },
     undefined,
     (err) => {
@@ -116,7 +122,7 @@ const loadGLTFModel = (path) => {
 };
 
 /** Color Submit Form */
-const onClickSubmitColor = (e) => {
+const onClickSubmitColor = e => {
   e.preventDefault();
   modelColor = validateHexString($('#colorInput').val());
 
@@ -126,6 +132,26 @@ const onClickSubmitColor = (e) => {
   $('#colorInput').val(modelColor);
   model.material = new THREE.MeshPhongMaterial({ color: new THREE.Color(modelColor) });
 };
+
+/** Models Submit Form */
+const onClickSubmitModel = e => {
+  e.preventDefault();
+  const newModel = $('#models')[0].value;
+
+  if (chosenModel === newModel) return;
+
+  scene.remove(gltfScene);
+  switch (newModel) {
+    case "tin":
+      loadGLTFModel("./assets/3d-models/tin.gltf");
+      break;
+    case "jar":
+      loadGLTFModel("./assets/3d-models/jar.gltf");
+      break;
+  }
+
+  chosenModel = newModel;
+}
 
 /** On Resize */
 const onWindowResize = () => {
