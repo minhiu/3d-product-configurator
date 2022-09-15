@@ -3,14 +3,15 @@ import * as THREE from "three";
 import WebGL from "./modules/WebGL";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import ColorPicker from "simple-color-picker";
+import '@easylogic/colorpicker/dist/colorpicker.css'
+import {ColorPicker} from '@easylogic/colorpicker' 
 
 let scene, camera, renderer, controls, gridHelper, light, colorPicker;
-let model, modelColor, chosenModel = 'tin';
+let model, chosenModel = 'tin';
 let isMinimized = false;
 
 /** Initialize all instances */
-const init = () => {
+const init = async () => {
   // Check WebGL Availability
   if (!WebGL.isWebGLAvailable()) {
     const warning = WebGL.getWebGLErrorMessage();
@@ -34,37 +35,44 @@ const init = () => {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.getElementById("container").appendChild(renderer.domElement);
-  renderer.setClearColor(0x65c4a8, 1);
+  renderer.setClearColor(0xffffff, 1);
 
   // Orbit Control
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.autoRotate = false;
+  controls.autoRotate = true;
 
   // Grid
-  gridHelper = new THREE.GridHelper(250, 10, 0xf1f1f1, 0xf1f1f1);
+  gridHelper = new THREE.GridHelper(250, 10, 0xeeeeee, 0xeeeeee);
   scene.add(gridHelper);
 
   // Lighting
-  light = new THREE.HemisphereLight( 0xffffff, 0x65c4a8, 1 );
+  light = new THREE.HemisphereLight( 0xffffff, 0x000000, 1);
   scene.add( light );
 
   // Color Picker
-  colorPicker = new ColorPicker({color: "#9CB4CC"});
-  colorPicker.appendTo(document.querySelector(".color-picker"));
+  colorPicker = new ColorPicker({
+    type: 'palette',
+    position: 'inline',
+    container: document.querySelector(".color-picker"),
+    edit: false,
+    onChange: c => onChangeModelColor(c),
+  })
+  colorPicker.setUserPalette([
+    {
+      name: '',
+      colors: ['#FFFFFF', '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4',  '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722',  '#795548', '#9E9E9E', '#607D8B'],
+    }
+  ]);
+  $('.color-sets-choose-btn').css('display', 'none');
+  $('.color-list').css('margin-right', '0');
+  $('.color-list').css('margin-top', '-10px');
 
   // 3D Model
-  loadGLTFModel(`${process.env.URL}/assets/3d-models/tin.gltf`);
+  await loadGLTFModel(`${process.env.URL}/assets/3d-models/tin.gltf`);
 
   // Event Listner
   window.addEventListener( 'resize', onWindowResize );
-  $('#colorBtn').click(onClickSubmitColor);
-  $('#modelBtn').click(onClickSubmitModel);
-
-  colorPicker.onChange((e) => {
-    modelColor = e;
-    $("#colorInput").val(modelColor);
-  });
-
+  $('#models').change(onChangeModel);
   $('#minimizeBtn').click(() => {
     if (isMinimized) {
       $('#leftBar').css("left", "0");
@@ -93,50 +101,40 @@ const render = () => {
 };
 
 /** Load 3D GLTF Model */
-const loadGLTFModel = (path) => {
+const loadGLTFModel = async (path) => {
   const loader = new GLTFLoader();
-  loader.load(
-    path,
-    (gltf) => {
-      const material = new THREE.MeshPhongMaterial({ color: 0x9CB4CC });
-      model = gltf.scene.children[0];
-      model.material = material;
-      model.scale.set(1, 1, 1);
-      model.rotateX(Math.PI / 2);
-      
-      if (path.includes("tin"))
-        model.position.set(-55, -37, -80);
-      else if (path.includes("jar"))
-        model.position.set(-50, 0, -50);
-      else if (path.includes("chapstick"))
-        model.position.set(-10, 0, -45);
-      else if (path.includes("pre-roll-tube"))
-        model.position.set(-15, 0, -45);
-      else if (path.includes("skincare-bottle"))
-        model.position.set(-17, 0, -20);
+  const gltf = await loader.loadAsync(path);
+  const material = new THREE.MeshPhongMaterial({ color: 0x4CAF50 });
+  model = gltf.scene.children[0];
+  model.material = material;
+  model.scale.set(1, 1, 1);
+  model.rotateX(Math.PI / 2);
+  
+  if (path.includes("tin"))
+    model.position.set(-55, -37, -80);
+  else if (path.includes("jar"))
+    model.position.set(-50, 0, -50);
+  else if (path.includes("chapstick"))
+    model.position.set(-10, 0, -45);
+  else if (path.includes("pre-roll-tube"))
+    model.position.set(-15, 0, -45);
+  else if (path.includes("skincare-bottle"))
+    model.position.set(-17, 0, -20);
 
-      scene.add(model);    
-    },
-    undefined,
-    (err) => {
-      console.log(error(err));
-    }
-  );
+  scene.add(model);
 };
 
-/** Color Submit Form */
-const onClickSubmitColor = e => {
-  modelColor = validateHexString($('#colorInput').val());
-
-  if (colorPicker.getHexString() !== modelColor) {
-    colorPicker.setColor(modelColor);
-  }
-  $('#colorInput').val(modelColor);
-  model.material = new THREE.MeshPhongMaterial({ color: new THREE.Color(modelColor) });
+/** On Change Model Color Event Handler */
+const onChangeModelColor = color => {
+  model.material = new THREE.MeshPhongMaterial({ color: new THREE.Color(toHexString(color)) });
 };
 
-/** Models Submit Form */
-const onClickSubmitModel = e => {
+const toHexString = hex => {
+  return parseInt(hex.replace(/^#/, '0x'), 16);
+}
+
+/** On Change Model Event Handler */
+const onChangeModel = e => {
   const newModel = $('#models')[0].value;
 
   if (chosenModel === newModel) return;
@@ -168,19 +166,6 @@ const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-/** Validate color hexstring */
-const validateHexString = (hex) => {
-  let newHex = hex;
-
-  if (hex[0] !== "#" && hex.length === 6) {
-    newHex = "#" + hex;
-  } else if (hex.length !== 7) {
-    newHex = "#9CB4CC";
-    alert("Wrong Hex String. Please use this format: '#FFFFFF' ");
-  }
-  return newHex;
 }
 
 init();
