@@ -42,7 +42,7 @@ const init = async () => {
   controls.autoRotate = true;
 
   // Grid
-  gridHelper = new THREE.GridHelper(250, 10, 0xeeeeee, 0xeeeeee);
+  gridHelper = new THREE.GridHelper(250, 10, 0xC9FDD7, 0xC9FDD7);
   scene.add(gridHelper);
 
   // Lighting
@@ -111,7 +111,11 @@ const loadGLTFModel = async (path) => {
   model.rotateX(Math.PI / 2);
   
   if (path.includes("tin"))
-    model.position.set(-55, -37, -80);
+    model.position.set(-50, 0, -80);
+  else if (path.includes("airtight-jar")) {
+    model.position.set(57, 0, -25);
+    model.rotateZ(Math.PI / 2);
+  }
   else if (path.includes("jar"))
     model.position.set(-50, 0, -50);
   else if (path.includes("chapstick"))
@@ -143,6 +147,9 @@ const onChangeModel = e => {
   switch (newModel) {
     case "tin":
       loadGLTFModel(`${process.env.URL}/assets/3d-models/tin.gltf`);
+      break;
+    case "airtight-jar":
+      loadGLTFModel(`${process.env.URL}/assets/3d-models/airtight-jar.gltf`);
       break;
     case "jar":
       loadGLTFModel(`${process.env.URL}/assets/3d-models/jar.gltf`);
