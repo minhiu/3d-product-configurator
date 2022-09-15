@@ -6,7 +6,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import ColorPicker from "simple-color-picker";
 
 let scene, camera, renderer, controls, gridHelper, light, colorPicker;
-let gltfScene, model, modelColor, chosenModel = 'tin';
+let model, modelColor, chosenModel = 'tin';
 let isMinimized = false;
 
 /** Initialize all instances */
@@ -38,14 +38,14 @@ const init = () => {
 
   // Orbit Control
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.autoRotate = true;
+  controls.autoRotate = false;
 
   // Grid
   gridHelper = new THREE.GridHelper(250, 10, 0xf1f1f1, 0xf1f1f1);
   scene.add(gridHelper);
 
   // Lighting
-  const light = new THREE.HemisphereLight( 0xffffff, 0x65c4a8, 1 );
+  light = new THREE.HemisphereLight( 0xffffff, 0x65c4a8, 1 );
   scene.add( light );
 
   // Color Picker
@@ -99,19 +99,23 @@ const loadGLTFModel = (path) => {
     path,
     (gltf) => {
       const material = new THREE.MeshPhongMaterial({ color: 0x9CB4CC });
-      gltfScene = gltf.scene;
-      model = gltfScene.children[0];
+      model = gltf.scene.children[0];
       model.material = material;
-      gltfScene.autoRotate = true;
-      gltfScene.scale.set(1, 1, 1);
-      gltfScene.rotateX(Math.PI / 2);
+      model.scale.set(1, 1, 1);
+      model.rotateX(Math.PI / 2);
       
       if (path.includes("tin"))
-          gltfScene.position.set(-55, -37, -80);
+        model.position.set(-55, -37, -80);
       else if (path.includes("jar"))
-          gltfScene.position.set(-50, 0, -50);
+        model.position.set(-50, 0, -50);
+      else if (path.includes("chapstick"))
+        model.position.set(-10, 0, -45);
+      else if (path.includes("pre-roll-tube"))
+        model.position.set(-15, 0, -45);
+      else if (path.includes("skincare-bottle"))
+        model.position.set(-17, 0, -20);
 
-      scene.add(gltfScene);    
+      scene.add(model);    
     },
     undefined,
     (err) => {
@@ -137,13 +141,22 @@ const onClickSubmitModel = e => {
 
   if (chosenModel === newModel) return;
 
-  scene.remove(gltfScene);
+  scene.remove(model);
   switch (newModel) {
     case "tin":
       loadGLTFModel(`${process.env.URL}/assets/3d-models/tin.gltf`);
       break;
     case "jar":
       loadGLTFModel(`${process.env.URL}/assets/3d-models/jar.gltf`);
+      break;
+    case "chapstick":
+      loadGLTFModel(`${process.env.URL}/assets/3d-models/chapstick.gltf`);
+      break;
+    case "pre-roll-tube":
+      loadGLTFModel(`${process.env.URL}/assets/3d-models/pre-roll-tube.gltf`);
+      break;
+    case "skincare-bottle":
+      loadGLTFModel(`${process.env.URL}/assets/3d-models/skincare-bottle.gltf`);
       break;
   }
 
