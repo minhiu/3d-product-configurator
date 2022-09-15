@@ -39,8 +39,7 @@ const init = async () => {
 
   // Orbit Control
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.autoRotate = true;
-
+  
   // Grid
   gridHelper = new THREE.GridHelper(250, 10, 0xC9FDD7, 0xC9FDD7);
   scene.add(gridHelper);
@@ -73,6 +72,7 @@ const init = async () => {
   // Event Listner
   window.addEventListener( 'resize', onWindowResize );
   $('#models').change(onChangeModel);
+  $('#rotate-checkbox').change(onChangeRotation);
   $('#minimizeBtn').click(() => {
     if (isMinimized) {
       $('#leftBar').css("left", "0");
@@ -132,6 +132,12 @@ const loadGLTFModel = async (path) => {
 const onChangeModelColor = color => {
   model.material = new THREE.MeshPhongMaterial({ color: new THREE.Color(toHexString(color)) });
 };
+
+/** On Change Rotation Checkbox Event Handler */
+const onChangeRotation = () => {
+  const checked = $('#rotate-checkbox')[0].checked;
+  controls.autoRotate = checked ? true : false;
+}
 
 const toHexString = hex => {
   return parseInt(hex.replace(/^#/, '0x'), 16);

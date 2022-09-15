@@ -11,11 +11,6 @@
     .Scp {
       margin-inline: auto;
     }
-
-    /* #colorBtn:hover {
-      background-color: #fff !important;
-      border: 1px solid #65c4a8 !important;
-    } */
   </style>
 </head>
 
@@ -40,7 +35,7 @@
       <div id="model" style="margin-bottom: 40px;">
         <h3 style="margin-bottom: 0; font-weight: 300;">Choose a model:</h3>
         <select name="models" id="models" style="
-          width: 60px;
+          width: 100px;
           height: 25px;
           box-shadow: none;
           border: 1px solid #65c4a8;
@@ -63,7 +58,7 @@
           transition: 0.3s ease-in-out;
         " type="submit">Submit</button> -->
       </div>
-      <div id="color">
+      <div id="color" style="margin-bottom: 40px;" >
         <h3 style="margin-bottom: 0; font-weight: 300;">Choose a color:</h3>
         <!-- <input style="
           width: 60px;
@@ -80,7 +75,11 @@
             cursor: pointer;
             transition: 0.3s ease-in-out;
           " type="submit">Submit</button> -->
-          <div class="color-picker" style="margin: auto; margin-top: 5px;"></div>
+          <div class="color-picker" style="margin: auto; margin-top: 5px;"></div> 
+      </div>
+      <div class="rotate">
+        <input id="rotate-checkbox" style="display: inline" type="checkbox" />
+        <p style="display: inline">Enable Auto Rotating</p>
       </div>
       <p style="color: #000; left: 0; right: 0; position: absolute; bottom: 0">
         More features coming soon!
