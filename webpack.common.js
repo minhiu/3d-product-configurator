@@ -1,9 +1,11 @@
 const path = require("path");
+const PACKAGE = require('./package.json');
+const version = PACKAGE.version;
 
 module.exports = {
   entry: "./src/index.js",
   output: {
-    filename: "main.js",
+    filename: `main.js?v=${version}`,
     path: path.resolve(__dirname, "dist"),
   },
   module: {
