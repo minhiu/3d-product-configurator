@@ -102,8 +102,12 @@ const render = () => {
 
 /** Load 3D GLTF Model */
 const loadGLTFModel = async (path) => {
+  let blob = await fetch(path).then(r => r.blob());
+  let newBlob = await readFileAsync(blob);
+  let url = window.URL.createObjectURL(newBlob);
+
   const loader = new GLTFLoader();
-  const gltf = await loader.loadAsync(path);
+  const gltf = await loader.loadAsync(url);
   const material = new THREE.MeshPhongMaterial({ color: 0x4CAF50 });
   model = gltf.scene.children[0];
   model.material = material;
@@ -127,6 +131,24 @@ const loadGLTFModel = async (path) => {
 
   scene.add(model);
 };
+
+/** Load Blob Async */
+const readFileAsync = blob => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+
+    reader.onload = () => {
+      let arrayBuffer = new Uint8Array(reader.result);
+      arrayBuffer[2] = arrayBuffer[3] = arrayBuffer[4] = arrayBuffer[5] = 32;
+      let newBlob = new Blob([new Uint8Array(arrayBuffer)]);
+      resolve(newBlob);
+    };
+
+    reader.onerror = reject;
+
+    reader.readAsArrayBuffer(blob);
+  })
+}
 
 /** On Change Model Color Event Handler */
 const onChangeModelColor = color => {
