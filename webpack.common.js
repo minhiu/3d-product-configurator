@@ -22,7 +22,7 @@ module.exports = {
           {
             loader: "asset/resource",
             options: {
-              outputPath: "assets/models/",
+              outputPath: "assets/3d-models/",
             },
           },
         ],
