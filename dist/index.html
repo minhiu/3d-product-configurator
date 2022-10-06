@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>TPC 3D Product Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .Scp {
+        margin-inline: auto;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <title>TPC 3D Product Room</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap" rel="stylesheet" />
-  <style>
-    .Scp {
-      margin-inline: auto;
-    }
-  </style>
-</head>
-
-<body style="margin: 0; font-family: 'Urbanist', sans-serif">
-  <div id="container">
-    <div id="leftBar" style="
+  <body style="margin: 0; font-family: 'Urbanist', sans-serif">
+    <div id="container">
+      <div
+        id="leftBar"
+        style="
           background-color: transparent;
           position: absolute;
           width: 300px;
@@ -27,40 +31,67 @@
           border-left: 1px solid #65c4a8;
           transition: 0.3s ease-in-out;
           left: 0;
-        ">
-      <img src="./assets/images/tpc-logo.png" style="width: 100px" />
-      <h1 style="font-size: 30px; font-weight: 400">
-        3D Showroom
-      </h1>
-      <div id="model" style="margin-bottom: 40px;">
-        <h3 style="margin-bottom: 0; font-weight: 300;">Choose a model:</h3>
-        <select name="models" id="models" style="
-          width: 100px;
-          height: 25px;
-          box-shadow: none;
-          border: 1px solid #65c4a8;
-          margin: auto;
-          ">
-          <option value="tin" selected="selected">Tin</option>
-          <option value="airtight-jar">Airtight Jar</option>
-          <option value="jar">Jar</option>
-          <option value="chapstick">Chapstick</option>
-          <option value="pre-roll-tube">Pre-roll Tube</option>
-          <option value="skincare-bottle">Skincare Bottle</option>
-        </select>
-        <!-- <button id="modelBtn" style="
-          width: 60px;
-          height: 25px;
-          box-shadow: none;
-          border: none;
-          background-color: #65c4a8;
-          cursor: pointer;
-          transition: 0.3s ease-in-out;
-        " type="submit">Submit</button> -->
-      </div>
-      <div id="color" style="margin-bottom: 40px;" >
-        <h3 style="margin-bottom: 0; font-weight: 300;">Choose a color:</h3>
-        <!-- <input style="
+        "
+      >
+        <img src="./assets/images/tpc-logo.png" style="width: 100px" />
+        <h1 style="font-size: 30px; font-weight: 400">3D Showroom</h1>
+        <div id="model" style="margin-bottom: 40px">
+          <h3
+            style="
+              margin-bottom: 0;
+              font-weight: 400;
+              text-decoration: underline;
+            "
+          >
+            Choose a model:
+          </h3>
+          <select
+            name="models"
+            id="models"
+            style="
+              width: 100px;
+              height: 25px;
+              box-shadow: none;
+              border: 1px solid #65c4a8;
+              margin: auto;
+            "
+          >
+            <option value="tin" selected="selected">Tin</option>
+            <option value="airtight-jar">Airtight Jar</option>
+            <option value="jar">Jar</option>
+            <option value="chapstick">Chapstick</option>
+            <option value="pre-roll-tube">Pre-roll Tube</option>
+            <option value="skincare-bottle">Skincare Bottle</option>
+          </select>
+          <p>Or upload a gltf file:</p>
+
+          <label
+            style="
+              width: 60px;
+              height: 25px;
+              padding: 5px 10px 5px 10px;
+              box-shadow: none;
+              border: none;
+              background-color: #65c4a8;
+              cursor: pointer;
+              transition: 0.3s ease-in-out;
+            "
+          >
+            Upload
+            <input id="userModel" type="file" style="visibility: hidden; position: absolute;" />
+          </label>
+        </div>
+        <div id="color" style="margin-bottom: 40px">
+          <h3
+            style="
+              margin-bottom: 0;
+              font-weight: 300;
+              text-decoration: underline;
+            "
+          >
+            Choose a color:
+          </h3>
+          <!-- <input style="
           width: 60px;
           height: 20px;
           box-shadow: none;
@@ -75,17 +106,21 @@
             cursor: pointer;
             transition: 0.3s ease-in-out;
           " type="submit">Submit</button> -->
-          <div class="color-picker" style="margin: auto; margin-top: 5px;"></div> 
+          <div class="color-picker" style="margin: auto; margin-top: 5px"></div>
+        </div>
+        <div class="rotate">
+          <input id="rotate-checkbox" style="display: inline" type="checkbox" />
+          <p style="display: inline">Enable Auto Rotating</p>
+        </div>
+        <p
+          style="color: #000; left: 0; right: 0; position: absolute; bottom: 0"
+        >
+          More features coming soon!
+        </p>
       </div>
-      <div class="rotate">
-        <input id="rotate-checkbox" style="display: inline" type="checkbox" />
-        <p style="display: inline">Enable Auto Rotating</p>
-      </div>
-      <p style="color: #000; left: 0; right: 0; position: absolute; bottom: 0">
-        More features coming soon!
-      </p>
-    </div>
-    <img id="minimizeBtn" style="
+      <img
+        id="minimizeBtn"
+        style="
           width: 30px;
           height: 30px;
           position: absolute;
@@ -93,10 +128,11 @@
           top: calc(50vh - 30px);
           transition: 0.3s ease-in-out;
           cursor: pointer;
-        " src="./assets/images/icon-back.png">
-    <script src="./assets/js/jquery-3.6.0.min.js"></script>
-    <script src="main.js"></script>
-  </div>
-</body>
-
+        "
+        src="./assets/images/icon-back.png"
+      />
+      <script src="./assets/js/jquery-3.6.0.min.js"></script>
+      <script src="main.js"></script>
+    </div>
+  </body>
 </html>

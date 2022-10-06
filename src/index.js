@@ -86,6 +86,7 @@ const init = async () => {
     }
     isMinimized = !isMinimized;
   });
+  $('#userModel').change(onModelUpload);
 };
 
 /** Animate the object */
@@ -105,7 +106,7 @@ const loadGLTFModel = async (path) => {
   let blob = await fetch(path).then(r => r.blob());
   let newBlob = await readFileAsync(blob);
   let url = window.URL.createObjectURL(newBlob);
-
+  
   const loader = new GLTFLoader();
   const gltf = await loader.loadAsync(url);
   const material = new THREE.MeshPhongMaterial({ color: 0x4CAF50 });
@@ -194,6 +195,13 @@ const onChangeModel = e => {
   }
 
   chosenModel = newModel;
+}
+
+/** On Upload Model Event Handler */
+const onModelUpload = e => {
+  const userModel = e.target.files[0];
+  const userModelURL = URL.createObjectURL(userModel);
+  loadGLTFModel(userModelURL);
 }
 
 /** On Resize */
